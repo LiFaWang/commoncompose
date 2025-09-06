@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.lifa.myapplication"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -19,6 +19,10 @@ android {
     }
 
     buildTypes {
+        debug {
+
+
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -28,11 +32,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -71,4 +75,12 @@ dependencies {
     implementation(libs.androidx.navigation.compose) // 请使用最新版本
     implementation(libs.androidx.compose.material.icons.core) // 为了底部导航图标
     implementation(libs.androidx.compose.material.icons.extended) // 为了更多图标选项
+
+    // 通过OkHttp的拦截器机制
+    // 实现在应用通知栏显示网络请求功能
+    // https://github.com/ChuckerTeam/chucker
+    // debug 下的依赖
+    debugImplementation(libs.chucker)
+    // prod 下的空依赖
+    releaseImplementation(libs.chucker.no.op)
 }

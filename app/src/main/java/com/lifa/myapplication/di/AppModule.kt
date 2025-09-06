@@ -1,6 +1,7 @@
 package com.lifa.myapplication.di
 
 
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.lifa.myapplication.ui.viewmodel.MainViewModel
 import com.lifa.myapplication.data.network.ApiService
 import com.lifa.myapplication.data.repository.PostRepository
@@ -9,6 +10,7 @@ import com.lifa.myapplication.ui.viewmodel.LoginViewModel
 import com.lifa.myapplication.ui.viewmodel.ProfileViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.GlobalContext.get
 import org.koin.dsl.module
@@ -23,6 +25,10 @@ val appModule = module {
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY // 用于查看网络请求和响应日志
             })
+            .apply {
+                val appContext = androidApplication()
+                addInterceptor(ChuckerInterceptor.Builder(appContext).build())
+            }
             .build()
     }
 
