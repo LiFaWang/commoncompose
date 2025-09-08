@@ -16,6 +16,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
     }
 
     buildTypes {
@@ -40,6 +41,34 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
+    }
+
+    flavorDimensions += listOf("env")
+
+    productFlavors {
+        create("dev") {
+            dimension = "env"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            buildConfigField("String", "ENV_NAME", "\"dev\"")
+            buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.typicode.com/\"")
+            resValue("string", "app_name", "ComposeBase Dev")
+        }
+        create("qa") {
+            dimension = "env"
+            applicationIdSuffix = ".qa"
+            versionNameSuffix = "-qa"
+            buildConfigField("String", "ENV_NAME", "\"qa\"")
+            buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.typicode.com/\"")
+            resValue("string", "app_name", "ComposeBase QA")
+        }
+        create("prod") {
+            dimension = "env"
+            buildConfigField("String", "ENV_NAME", "\"prod\"")
+            buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.typicode.com/\"")
+            resValue("string", "app_name", "ComposeBase")
+        }
     }
 }
 
@@ -83,4 +112,10 @@ dependencies {
     debugImplementation(libs.chucker)
     // prod 下的空依赖
     releaseImplementation(libs.chucker.no.op)
+
+    // 启动页
+    implementation(libs.androidx.core.splashscreen)
+
+    // DataStore Preferences
+    implementation(libs.androidx.datastore.preferences)
 }

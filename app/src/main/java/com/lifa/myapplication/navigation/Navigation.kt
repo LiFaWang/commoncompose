@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 object AppDestinations {
     const val LOGIN_ROUTE = "login"
     const val MAIN_ROUTE = "main"
+    const val SPLASH_ROUTE = "splash"
 
     // 修改 SETTINGS_ROUTE 以包含参数占位符
     // 参数的名称将在 NavHost 中定义

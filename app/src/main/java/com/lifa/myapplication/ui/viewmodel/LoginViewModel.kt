@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lifa.myapplication.data.AuthManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -15,7 +16,7 @@ sealed class LoginNavigationEvent {
     object Idle : LoginNavigationEvent() // 初始状态或无导航事件
 }
 
-class LoginViewModel(/* private val authRepository: AuthRepository */) : ViewModel() { // 假设未来有认证仓库
+class LoginViewModel(private val authManager: AuthManager) : ViewModel() { // 注入 AuthManager
 
     var email by mutableStateOf("")
     var password by mutableStateOf("")
@@ -51,7 +52,8 @@ class LoginViewModel(/* private val authRepository: AuthRepository */) : ViewMod
 
             // 模拟登录成功/失败逻辑
             if (email == "test@example.com" && password == "password") {
-                // 登录成功，更新导航事件
+                // 登录成功，保存登录信息并更新导航事件
+                authManager.saveLogin(token = "fake_token_${System.currentTimeMillis()}", email = email)
                 navigationEvent = LoginNavigationEvent.NavigateToMain
             } else {
                 errorMessage = "Invalid email or password."

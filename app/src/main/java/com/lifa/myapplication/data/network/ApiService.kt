@@ -11,6 +11,6 @@ interface ApiService {
 
 
 
-    @GET("user")
+    @GET("/posts/1")
     suspend fun getUser(): Response<User>
 }

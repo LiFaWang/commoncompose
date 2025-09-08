@@ -19,10 +19,26 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.lifa.myapplication.navigation.AppDestinations
 import com.lifa.myapplication.navigation.bottomNavItems
+import com.lifa.myapplication.navigation.RouteGuard
+import org.koin.androidx.compose.koinViewModel
+import com.lifa.myapplication.ui.viewmodel.AuthViewModel
 
 @Composable
 fun MainScreen(mainNavController: NavHostController) { // 接收来自 AppNavHost 的 NavController
     val bottomNavController = rememberNavController() // 用于底部导航内部的切换
+    val authViewModel: AuthViewModel = koinViewModel()
+
+    // 对底部导航的 NavController 同样安装集中守卫
+    RouteGuard.install(
+        navController = bottomNavController,
+        authViewModel = authViewModel,
+        protectedRoutePatterns = setOf(
+            AppDestinations.SEARCH_SCREEN_ROUTE,
+            AppDestinations.PROFILE_SCREEN_ROUTE,
+            AppDestinations.MORE_OPTIONS_ROUTE
+        ),
+        redirectNavController = mainNavController
+    )
 
     Scaffold(
         bottomBar = {
@@ -38,7 +54,7 @@ fun MainScreen(mainNavController: NavHostController) { // 接收来自 AppNavHos
                 HomeScreen() // PostScreen现在是HomeScreen
             }
             composable(AppDestinations.SEARCH_SCREEN_ROUTE) {
-                SearchScreen()
+                SearchScreen(navController = mainNavController)
             }
             composable(AppDestinations.PROFILE_SCREEN_ROUTE) {
                 // ProfileScreen 现在需要 mainNavController 来跳转到 Settings

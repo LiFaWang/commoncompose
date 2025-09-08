@@ -20,6 +20,14 @@ retrofit = "2.9.0"
 # 说明: 通过 OkHttp 拦截器机制在应用通知栏显示网络请求功能
 chucker = "4.2.0"
 
+# DataStore
+datastore = "1.1.1"
+
+# 启动页相关版本
+# AndroidX Core Splashscreen: https://developer.android.com/jetpack/androidx/releases/core
+# 说明: 提供启动画面 API，兼容 Android 12+ 的启动画面
+androidxCoreSplashscreen = "1.0.1"
+
 [libraries]
 androidx-compose-material-icons-core = { module = "androidx.compose.material:material-icons-core", version.ref = "materialIconsCore" }
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsCore" }
@@ -47,6 +55,12 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 # 网络调试相关库
 chucker = { group = "com.github.chuckerteam.chucker", name = "library", version.ref = "chucker" }
 chucker-no-op = { group = "com.github.chuckerteam.chucker", name = "library-no-op", version.ref = "chucker" }
+
+# 启动页相关库
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxCoreSplashscreen" }
+
+# DataStore Preferences
+androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
