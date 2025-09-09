@@ -1,15 +1,26 @@
 package com.lifa.myapplication.ui.screens
 
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.MaterialTheme
+
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -69,29 +80,62 @@ fun MainScreen(mainNavController: NavHostController) { // 接收来自 AppNavHos
 
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
-    NavigationBar {
+    // 使用 Row 替代 NavigationBar
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp) // 设置合适的高度
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(horizontal = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
 
         bottomNavItems.forEach { screen ->
-            NavigationBarItem(
-                icon = { Icon(screen.icon, contentDescription = screen.label) },
-                label = { Text(screen.label) },
-                selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
-                onClick = {
-                    navController.navigate(screen.route) {
+            val isSelected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
 
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
+            // 创建一个空的 InteractionSource 来禁用水波纹效果
+            val interactionSource = remember { MutableInteractionSource() }
+
+            androidx.compose.foundation.layout.Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null // 禁用指示器
+                    ) {
+                        navController.navigate(screen.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        // Avoid multiple copies of the same destination when
-                        // reselecting the same item
-                        launchSingleTop = true
-                        // Restore state when reselecting a previously selected item
-                        restoreState = true
                     }
+                    .padding(vertical = 12.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = screen.icon,
+                        contentDescription = screen.label,
+                        tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = screen.label,
+                        color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.labelMedium
+                    )
                 }
-            )
+            }
         }
     }
 }
+
+
+
+

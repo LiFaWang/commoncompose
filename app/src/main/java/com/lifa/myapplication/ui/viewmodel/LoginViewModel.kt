@@ -51,7 +51,7 @@ class LoginViewModel(private val authManager: AuthManager) : ViewModel() { // �
             delay(2000)
 
             // 模拟登录成功/失败逻辑
-            if (email == "test@example.com" && password == "password") {
+            if (email == "test@qq.com" && password == "123456") {
                 // 登录成功，保存登录信息并更新导航事件
                 authManager.saveLogin(token = "fake_token_${System.currentTimeMillis()}", email = email)
                 navigationEvent = LoginNavigationEvent.NavigateToMain
